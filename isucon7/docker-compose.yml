@@ -1,0 +1,59 @@
+version: '3'
+services:
+  bench:
+    build:
+      context: ./
+      dockerfile: ./docker/bench
+    depends_on:
+      - web
+    networks:
+      - frontend
+  web:
+    build:
+      context: ./
+      dockerfile: ./docker/web/Dockerfile.local
+    networks:
+      - frontend
+      - backend
+    volumes:
+      - ./data/images:/data/images
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+  app:
+    build:
+      context: ./
+      dockerfile: ./docker/app/golang/Dockerfile.local
+    networks:
+      - backend
+    depends_on:
+       - db
+    ports:
+      - "5000"
+    environment:
+      ISUBATA_DB_USER: isucon
+      ISUBATA_DB_PASSWORD: isucon
+      ISUBATA_DB_HOST: db
+    volumes:
+      - ./data/images:/data/images
+
+  db:
+    build:
+      context: ./
+      dockerfile: ./docker/db/Dockerfile.local
+    ports:
+      - "3306:3306"
+    networks:
+      - backend
+    command: ["--character-set-server=utf8mb4"]
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      #MYSQL_DATABASE: isubata
+      #MYSQL_USER: isucon
+      #MYSQL_PASSWORD: isucon
+    volumes:
+      - ./data/images:/data/images
+networks:
+  frontend:
+  backend:

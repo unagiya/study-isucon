@@ -3,7 +3,7 @@ services:
   bench:
     build:
       context: ./
-      dockerfile: ./docker/bench
+      dockerfile: ./docker/bench/Dockerfile.local
     depends_on:
       - web
     networks:

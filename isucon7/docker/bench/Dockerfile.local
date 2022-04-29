@@ -1,6 +1,6 @@
 FROM golang:1.9
 
-COPY /bench/ /home/isucon/isubata/
+COPY bench/ /home/isucon/isubata/bench/
 
 WORKDIR /home/isucon/isubata/bench
 RUN \
